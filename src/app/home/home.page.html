@@ -58,6 +58,24 @@
             </mat-card-actions>
           </mat-card>
         </ion-col>
+
+        <ion-col size="12" size-md="4" *ngIf="dishes.length === 0">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Place holder</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              Un plato vacío
+            </mat-card-content>
+            <mat-card-content>
+              $1
+            </mat-card-content>
+            <mat-card-actions>
+              <ion-button mat-button (click)="addDish(placeholderDish)">Comprar</ion-button>
+            </mat-card-actions>
+          </mat-card>
+        </ion-col>
+
       </ion-row>
     </ion-grid>
   </ion-content>

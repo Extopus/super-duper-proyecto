@@ -4,3 +4,9 @@
   <p>Price: ${{ item.price }}</p>
   <img [src]="item.image" alt="{{ item.name }}" />
 </div>
+
+<div *ngIf="items.length === 0">
+  <h2>Plato vacio</h2>
+  <p>Un plato Vacio</p>
+  <p>Price: $ 1</p>
+</div>
