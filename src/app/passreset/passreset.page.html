@@ -1,0 +1,20 @@
+<!-- password-reset.page.html -->
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Restablecer Contraseña</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <form [formGroup]="passwordResetForm" (ngSubmit)="onResetPassword()">
+    <ion-item>
+      <ion-label position="floating">Nombre de Usuario</ion-label>
+      <ion-input formControlName="username"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Nueva Contraseña</ion-label>
+      <ion-input type="password" formControlName="newPassword"></ion-input>
+    </ion-item>
+    <ion-button expand="full" type="submit">RECUPERAR</ion-button>
+  </form>
+</ion-content>

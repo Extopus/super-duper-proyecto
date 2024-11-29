@@ -1,0 +1,48 @@
+
+
+
+ion-header {
+    text-align: center;
+}
+
+
+ion-content {
+    --background:
+    background-color:;
+    background-image: 
+      radial-gradient(#ffffff 0.20px, transparent 0.10px),
+      radial-gradient(#ffffff 0.20px, #262626 0.65px); 
+    background-size: 14px 14px; 
+    background-position: 0 0, 13px 13px;
+    display: flex;
+    justify-content: center;
+    form {
+        width: 80%;
+        margin: 10vw;
+    }
+}
+
+
+ion-item {
+
+    --highlight-color-valid: ;
+    --highlight-color-invalid: red;
+    --inner-border-width:0;
+
+
+    ion-label {
+        margin-bottom: 1vh;
+    }
+
+
+    ion-input {
+        margin-top: 1.2vh;
+        margin-bottom: 3vh;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.556);
+    
+    }
+}
+
+
+
+

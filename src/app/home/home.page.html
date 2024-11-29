@@ -1,0 +1,64 @@
+
+  <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-button class="login-button" expand="full" slot="end" [routerLink]="['/login']">
+          {{ username }}
+        </ion-button>
+      </ion-toolbar>
+  </ion-header>
+
+  <ion-menu side="start" contentId="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Menú</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-list>
+        <ion-item [routerLink]="['/passreset']">
+          Restablecer Contraseña
+        </ion-item>
+        <ion-item [routerLink]="['/comida-order']">
+          Realizar Orden 
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <ion-content id="main-content">
+    <div style="margin: 10px;">
+      <ion-searchbar placeholder="Busque un plato"></ion-searchbar>
+    </div>
+
+    <mat-card style="margin: 20px;">
+      <h1 id="title-home" style="margin: 10px; line-height: 1.4;">
+        Bienvenido {{ username }}, estos son los almuerzos disponibles para hoy:
+      </h1>
+    </mat-card>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" size-md="4" *ngFor="let dish of dishes"> <!-- Use *ngFor to iterate -->
+          <mat-card>
+            <img mat-card-image [src]="dish.image" alt="{{ dish.name }}">
+            <mat-card-header>
+              <mat-card-title>{{ dish.name }}</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              {{ dish.description }}
+            </mat-card-content>
+            <mat-card-content>
+              ${{ dish.price }}
+            </mat-card-content>
+            <mat-card-actions>
+              <ion-button mat-button (click)="addDish(dish)">Comprar</ion-button>
+            </mat-card-actions>
+          </mat-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+
