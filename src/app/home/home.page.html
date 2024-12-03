@@ -1,9 +1,9 @@
-
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
+    <ion-title>Inicio</ion-title>
     <ion-button class="login-button" expand="full" slot="end" [routerLink]="['/login']">
       {{ username }}
     </ion-button>
@@ -19,9 +19,11 @@
   <ion-content>
     <ion-list>
       <ion-item [routerLink]="['/passreset']">
+        <ion-icon name="key-outline" slot="start"></ion-icon>
         Restablecer Contraseña
       </ion-item>
       <ion-item [routerLink]="['/comida-order']">
+        <ion-icon name="fast-food-outline" slot="start"></ion-icon>
         Realizar Orden
       </ion-item>
     </ion-list>
@@ -29,40 +31,58 @@
 </ion-menu>
 
 <ion-content id="main-content">
+  <!-- Barra de búsqueda -->
   <div style="margin: 10px;">
-    <ion-searchbar [(ngModel)]="searchQuery" (ionInput)="filterDishes()"></ion-searchbar>
+    <ion-searchbar 
+      [(ngModel)]="searchQuery" 
+      (ionInput)="filterDishes()" 
+      placeholder="Buscar almuerzos..."
+    ></ion-searchbar>
   </div>
 
   <!-- Mostrar la hora actual -->
-  <div>
+  <div style="text-align: center; margin: 10px;">
     <h2>Hora Actual: {{ currentTime }}</h2>
   </div>
 
   <!-- Botón para mostrar la hora en un toast -->
-  <ion-button expand="full" (click)="showToast()">Mostrar Hora</ion-button>
+  <ion-button expand="block" color="primary" (click)="showToast()">
+    Mostrar Hora
+  </ion-button>
 
-  <mat-card style="margin: 20px;">
+  <!-- Tarjeta de bienvenida -->
+  <mat-card style="margin: 20px; text-align: center;">
     <h1 id="title-home" style="margin: 10px; line-height: 1.4;">
-      Bienvenido {{ username }}, estos son los almuerzos disponibles para hoy:
+      Bienvenido, {{ username }}. Estos son los almuerzos disponibles para hoy:
     </h1>
   </mat-card>
 
+  <!-- Grilla de platos -->
   <ion-grid>
     <ion-row>
-      <ion-col size="12" size-md="4" *ngFor="let dish of filterDishes()">
-        <mat-card>
-          <img mat-card-image [src]="dish.image" alt="{{ dish.name }}">
+      <ion-col size="12" size-md="4" *ngFor="let dish of filteredDishes">
+        <mat-card style="margin: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+          <img 
+            mat-card-image 
+            [src]="dish.image" 
+            alt="{{ dish.name }}" 
+            style="height: 200px; object-fit: cover;"
+          >
           <mat-card-header>
             <mat-card-title>{{ dish.name }}</mat-card-title>
           </mat-card-header>
           <mat-card-content>
-            {{ dish.description }}
-          </mat-card-content>
-          <mat-card-content>
-            ${{ dish.price }}
+            <p>{{ dish.description }}</p>
+            <p><strong>${{ dish.price }}</strong></p>
           </mat-card-content>
           <mat-card-actions>
-            <ion-button mat-button (click)="addDish(dish)">Comprar</ion-button>
+            <ion-button 
+              expand="block" 
+              color="secondary" 
+              (click)="addDish(dish)"
+            >
+              Comprar
+            </ion-button>
           </mat-card-actions>
         </mat-card>
       </ion-col>

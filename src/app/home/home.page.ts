@@ -4,7 +4,7 @@ import { ItemService } from '../item.service';
 import { ToastController } from '@ionic/angular';
 import { Item } from '../item.model';
 import { LocalNotifications } from '@capacitor/local-notifications';
-import * as moment from 'moment'; // Importa moment.js
+import * as moment from 'moment'; // Importa moment.js para manejo de fechas
 
 @Component({
   selector: 'app-home',
@@ -12,10 +12,13 @@ import * as moment from 'moment'; // Importa moment.js
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage implements OnInit {
-  username: string = '';
-  dishes: Item[] = [];
-  isLoading: boolean = false;
-  errorMessage: string = '';
+  username: string = ''; // Almacena el nombre de usuario
+  dishes: Item[] = []; // Lista completa de platos
+  filteredDishes: Item[] = []; // Lista filtrada de platos para búsqueda
+  searchQuery: string = ''; // Consulta del buscador
+  isLoading: boolean = false; // Indica si los datos están cargándose
+  errorMessage: string = ''; // Mensaje de error
+  currentTime: string = ''; // Hora actual para mostrar
   placeholderDish: Item = {
     id: 777,
     name: 'Plato vacío',
@@ -23,7 +26,6 @@ export class HomePage implements OnInit {
     price: 1,
     image: 'null',
   };
-  currentTime: string = ''; // Para almacenar la hora actual
 
   constructor(
     private orderService: OrderService,
@@ -32,21 +34,21 @@ export class HomePage implements OnInit {
   ) {}
 
   async ngOnInit() {
-    await this.requestPermissions(); // Solicitar permisos al cargar
-    this.loadItems(); // Cargar platos disponibles
-    this.username = this.getUsername(); // Configurar el nombre de usuario
-    this.updateTime(); // Actualiza la hora en el inicio
+    await this.requestPermissions(); // Solicitar permisos de notificaciones
+    this.loadItems(); // Cargar los platos disponibles
+    this.username = this.getUsername(); // Cargar el nombre del usuario
+    this.updateTime(); // Iniciar la actualización de la hora
   }
 
-  // Función para obtener la hora actual y mostrarla
+  // Actualiza la hora actual cada segundo
   updateTime() {
     setInterval(() => {
       this.currentTime = moment().format('HH:mm:ss'); // Formato de hora:minuto:segundo
-      this.checkCasinoStatus(); // Verificar el estado del casino basado en la hora
-    }, 1000); // Actualizar cada segundo
+      this.checkCasinoStatus(); // Verifica el estado del casino según la hora
+    }, 1000); // Actualización cada segundo
   }
 
-  // Función para solicitar permisos de notificación
+  // Solicita permisos para enviar notificaciones
   async requestPermissions() {
     const result = await LocalNotifications.requestPermissions();
     if (result.display !== 'granted') {
@@ -54,10 +56,9 @@ export class HomePage implements OnInit {
     }
   }
 
-  // Verifica el estado del casino basado en la hora
+  // Verifica si el casino está abierto o cerrado según la hora
   async checkCasinoStatus() {
-    const hour = moment().hour(); // Obtener la hora actual
-
+    const hour = moment().hour(); // Obtiene la hora actual
     let message = '';
 
     if (hour >= 9 && hour < 12) {
@@ -68,30 +69,31 @@ export class HomePage implements OnInit {
       message = 'El casino está cerrado';
     }
 
-    await this.showToast(message); // Muestra el toast con el mensaje correspondiente
+    await this.showToast(message); // Muestra un toast con el estado actual
   }
 
-  // Función para mostrar el toast
-  async showToast(message: string) {
+  // Muestra un toast con un mensaje
+  async showToast(message?: string) {
     const toast = await this.toastController.create({
-      message: message,
-      duration: 2000, // Duración del toast
+      message: message || `Hora actual: ${moment().format('HH:mm:ss')}`,
+      duration: 2000, // Duración de 2 segundos
       position: 'bottom', // Posición del toast
     });
     toast.present();
   }
 
-  // Función para obtener el nombre de usuario
+  // Obtiene el nombre del usuario almacenado en el localStorage
   private getUsername(): string {
     return localStorage.getItem('username') || 'Usuario';
   }
 
-  // Función para cargar los platos disponibles
+  // Carga los platos disponibles desde el servicio
   private loadItems() {
     this.isLoading = true;
     this.itemService.getItems().subscribe(
       (data) => {
         this.dishes = data;
+        this.filteredDishes = [...this.dishes]; // Inicializa la lista filtrada
         this.isLoading = false;
         if (this.dishes.length === 0) {
           this.errorMessage = 'No hay platos disponibles en este momento.';
@@ -105,7 +107,18 @@ export class HomePage implements OnInit {
     );
   }
 
-  // Función para añadir un plato a la orden
+  // Filtra los platos según la consulta de búsqueda y devuelve la lista filtrada
+  filterDishes(): Item[] {
+    if (!this.searchQuery) {
+      return (this.filteredDishes = [...this.dishes]); // Sin búsqueda, mostrar todos
+    }
+    this.filteredDishes = this.dishes.filter((dish) =>
+      dish.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+    );
+    return this.filteredDishes;
+  }
+
+  // Añade un plato a la orden y muestra un toast de confirmación
   async addDish(dish: Item) {
     this.orderService.addDish(dish);
     const toast = await this.toastController.create({
