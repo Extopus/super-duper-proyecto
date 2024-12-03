@@ -28,10 +28,12 @@
     "@capacitor/core": "^6.2.0",
     "@capacitor/haptics": "6.0.1",
     "@capacitor/keyboard": "6.0.2",
+    "@capacitor/local-notifications": "^6.1.1",
     "@capacitor/status-bar": "6.0.1",
     "@capacitor/text-zoom": "^6.0.3",
     "@ionic/angular": "^8.0.0",
     "ionicons": "^7.0.0",
+    "moment": "^2.30.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"

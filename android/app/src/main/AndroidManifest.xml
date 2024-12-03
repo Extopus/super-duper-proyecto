@@ -36,6 +36,8 @@
     </application>
 
     <!-- Permissions -->
-
+    <!-- Permisos para Notificaciones -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Permisos para Internet -->
     <uses-permission android:name="android.permission.INTERNET" />
 </manifest>
